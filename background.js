@@ -8,6 +8,11 @@ var TYPE = {
 };
 // Current viewing mode
 var mode = TYPE.today;
+var publicData = {
+  "all":0,
+  "today":0,
+  // "current":0
+}
 
 setDefaults();
 // Set default settings
@@ -167,6 +172,15 @@ function updateData() {
           total.today += UPDATE_INTERVAL;
           total.all += UPDATE_INTERVAL;
           localStorage["total"] = JSON.stringify(total);
+
+          // if(publicData["domain"] != domain)
+          // {
+          //   publicData["domain"] = domain;
+          //   publicData["current"] = 0;
+          // }
+          publicData["all"] = domain_data.all;
+          publicData["today"] = domain_data.today;
+          // publicData["current"] += UPDATE_INTERVAL;
           // Update badge with number of minutes spent on
           // current site
           var num_min = Math.floor(domain_data.today / 60).toString();
@@ -188,3 +202,10 @@ function updateData() {
 }
 // Update timer data every UPDATE_INTERVAL seconds
 setInterval(updateData, UPDATE_INTERVAL * 1000);
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.method == "getData")
+    sendResponse({data: publicData});
+  else
+    sendResponse({}); // snub them.
+});

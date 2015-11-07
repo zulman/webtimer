@@ -17,5 +17,12 @@
     "default_popup": "popup.html"
   },
   "options_page": "options.html",
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google.com https://platform.twitter.com; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google.com https://platform.twitter.com; object-src 'self'",
+  "content_scripts": [{
+      "matches": ["<all_urls>"],
+      "js": [
+          "contentscript.js"
+      ],
+      "run_at": "document_end"
+    }]
 }
