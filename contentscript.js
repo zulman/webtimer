@@ -1,6 +1,7 @@
 var el = document.createElement("div");
 el.setAttribute('id', 'web-timer'); 
 el.setAttribute('title', 'web-timer-counter'); 
+el.addEventListener("click", onWebCounterClicked);
 document.body.appendChild(el);
 
 var style = document.createElement('style')
@@ -17,12 +18,13 @@ style.innerHTML = '#web-timer {\
     background-color: #000;\
     color:#fff;\
     z-index: 2147483647;\
-    opacity: 1;\
+    opacity: 0.3;\
     text-align: left;\
     border-radius: 5px;\
     font-size: 14px;\
     font-family: "Courier New", Courier, monospace;\
-}'
+}\
+#web-timer:hover {opacity: 0.7;}'
 document.getElementsByTagName('head')[0].appendChild(style)
 
 toHHMMSS = function (timeStr) {
@@ -38,7 +40,14 @@ toHHMMSS = function (timeStr) {
     return time;
 }
 
+function onWebCounterClicked()
+{
+    el.style.display = 'none';
+}
+
 function redraw(){
+    if(el.style.display == 'none')
+        return;
     chrome.runtime.sendMessage({method: "getData"}, function(response) {
         var data = response.data;
         s = "";
@@ -49,3 +58,4 @@ function redraw(){
     });
 }
 setInterval(redraw, 3000);
+redraw();
